@@ -1,4 +1,4 @@
-﻿using System ;
+using System ;
 
 namespace Binary_Search_Tree
 {
@@ -103,6 +103,65 @@ namespace Binary_Search_Tree
             }
         }
 
+        public void Delete( int Value )
+        {
+            Delete(ref Root_Node , Value ) ;
+        }
+
+        public void Delete( ref Node Current_Node , int Value )
+        {
+            if( Current_Node == null )
+            {
+                Console.WriteLine("Value Not Found");
+                return;
+            }
+            if( Value < Current_Node.Data )
+            {
+                Delete(ref Current_Node.Left_Child, Value);
+                return;
+            }
+            if (Value > Current_Node.Data)
+            {
+                Delete(ref Current_Node.Right_Child, Value);
+                return;
+            }
+            if (Value == Current_Node.Data)
+            {
+                if( Current_Node.Left_Child == null && Current_Node.Right_Child != null )
+                {
+                    Current_Node = Current_Node.Right_Child ;
+                    return;
+                }
+                if (Current_Node.Right_Child == null && Current_Node.Left_Child != null)
+                {
+                    Current_Node = Current_Node.Left_Child ;
+                    return;
+                }
+                if( Current_Node.Right_Child == null && Current_Node.Left_Child == null )
+                {
+                    Current_Node = null ;
+                    return;
+                }
+
+                Node In_Order_Successor = Find_In_Order_Successor( ref Current_Node.Right_Child ) ;
+                Delete(In_Order_Successor.Data) ;
+                Current_Node.Data = In_Order_Successor.Data ;
+                return;
+            }
+
+        }
+
+        ref Node Find_In_Order_Successor( ref Node Current_Node)
+        {
+            if( Current_Node.Left_Child == null )
+            {
+                return ref Current_Node ;
+            }
+            else
+            {
+                 return ref Find_In_Order_Successor(ref Current_Node.Left_Child) ;
+            }
+        }
     }
 
 
@@ -119,6 +178,8 @@ namespace Binary_Search_Tree
             BST.Insert(75) ;
             BST.Insert(60) ;
             BST.Insert(100) ;
+            BST.Insert(90) ;
+            BST.Delete(50) ;
             BST.Pre_Order_Traversal() ;
             BST.In_Order_Traversal() ;
             BST.Post_Order_Traversal() ;
